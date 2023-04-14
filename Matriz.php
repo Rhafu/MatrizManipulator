@@ -37,19 +37,47 @@ class Matriz{
         }
     }
 
-    public static function sumMatrizes(Matriz $matriz1, Matriz $matriz2){
+    public function sumToThisMatriz(Matriz $matrizToAdd){
+        if(
+            $matrizToAdd->getLines() == $this->lines
+             &&
+            $matrizToAdd->getColumns() == $this->columns
+         ){
+            $numberOfLines = $this->getLines();
+            $numberOfColumns = $this->getColumns();
+
+            $recieverMatriz = $this->matriz;
+            $delivererMatriz = $matrizToAdd->matriz;
+            $myNewMatriz = array();
+
+            for($lineIndex = 0; $lineIndex < $numberOfLines; $lineIndex++){
+                for($columnIndex = 0; $columnIndex < $numberOfColumns; $columnIndex++){
+                        $myNewMatriz[$lineIndex][$columnIndex] = $recieverMatriz[$lineIndex][$columnIndex] + $delivererMatriz[$lineIndex][$columnIndex];
+                }        
+            }
+
+            $this->matriz = $myNewMatriz;
+         }else{
+            throw new InvalidArgumentException("Erro: a matriz que você deseja adicionar à sua não é correspondente em tamanho.");
+        }
+    }
+
+    public static function sumTwoMatrizes(Matriz $matriz1, Matriz $matriz2){
         if(
            $matriz1->getLines() == $matriz2->getLines()
             &&
            $matriz1->getColumns() == $matriz2->getColumns()
         ){
-            $arrayMatriz1 = $matriz1->getArrayMatriz();
-            $arrayMatriz2 = $matriz2->getArrayMatriz();
+            $numberOfLines = $matriz1->getLines();
+            $numberOfColumns = $matriz2->getColumns();
+            $matrizToSum1 = $matriz1->getArrayMatriz();
+            $matrizToSum2 = $matriz2->getArrayMatriz();
             $newMatriz = array();
 
-            for($i = 0; $i < $matriz1->getLines(); $i++){
-                for($j = 0; $j < $matriz1->getColumns(); $j++){
-                        $newMatriz[$i][$j] = $arrayMatriz1[$i][$j] + $arrayMatriz2[$i][$j];
+            for($lineIndex = 0; $lineIndex < $numberOfLines; $lineIndex++){
+                for($columnIndex = 0; $columnIndex < $numberOfColumns; $columnIndex++){
+
+                        $newMatriz[$lineIndex][$columnIndex] = $matrizToSum1[$lineIndex][$columnIndex] + $matrizToSum2[$lineIndex][$columnIndex];
                 }        
             }
 
@@ -70,23 +98,20 @@ class Matriz{
     private function getArrayMatriz(){
         return $this->matriz;
     }
-    // private function checkSumPossibility(Matriz $matriz1, Matriz $matriz2){
-    
-
-    
+   
     private function isValidSize($matriz){
         //Toda quantidade de items de uma matriz é divisível pela linha e pela coluna
 
-        // quantidade de elementos é a quantidade recursiva menos a contagem dos arrays
-        $qtdElements = count($matriz, COUNT_RECURSIVE) - count($matriz);
+        // Quantidade de elementos é a quantidade recursiva menos a contagem dos arrays. Contagem recursiva é a contagem que olha para os valores dentro do Array.
+        $numberOfElements = count($matriz, COUNT_RECURSIVE) - count($matriz);
 
         if(
             //Contando as linhas e dividindo pela quantidade de elementos da matriz
-            $qtdElements % count($matriz) == 0 
+            $numberOfElements % count($matriz) == 0 
             
             &&    
             //Contanto as colunas (são contadas com vista à primeira linha)
-            $qtdElements % count($matriz[0]) == 0
+            $numberOfElements % count($matriz[0]) == 0
     
         ){
             return true;
@@ -106,6 +131,7 @@ class Matriz{
 
         return true;
     }
+
 }
 
 // Testando classe
@@ -113,8 +139,10 @@ try{
     $matriz1 = new Matriz(array(array(1, 2, 3), array(4, 5, 6)));
     $matriz2 = new Matriz(array(array(1, 2, 3), array(4, 5, 6)));
 
-    $matriz3 = Matriz::sumMatrizes($matriz1, $matriz2);
-    $matriz3->printMatriz();
+    $matriz1->sumToThisMatriz($matriz2);
+
+    $matriz1->printMatriz();
+
 }catch(Exception $erro){
     echo $erro->getMessage();
 }
