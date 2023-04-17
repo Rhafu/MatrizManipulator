@@ -5,8 +5,8 @@ class Matriz{
 
     //Propriedades
     private array $matriz;
-    private int $lines;
-    private int $columns;
+    private int $numberOfLines;
+    private int $numberOfColumns;
 
     public function __construct(array $matriz)
     {
@@ -16,8 +16,8 @@ class Matriz{
             if($this->hasNoEmptyLine($matriz))
             {    
                 $this->matriz = $matriz;
-                $this->columns = count($matriz[0]);
-                $this->lines = count($matriz);
+                $this->numberOfColumns = count($matriz[0]);
+                $this->numberOfLines = count($matriz);
             }else{
                 throw new Exception("Erro: matriz possui linhas em branco");
             }
@@ -26,21 +26,21 @@ class Matriz{
        }
     }
 
-    public function sumToThisMatriz(Matriz $matrizToAdd){
+    public function sumToThisMatriz(Matriz $matrizToAdd)
+    {
         if(
-            $matrizToAdd->getLines() == $this->lines
+            $matrizToAdd->getNumberOfLines() == $this->getNumberOfLines()
              &&
-            $matrizToAdd->getColumns() == $this->columns
+            $matrizToAdd->getNumberOfColumns() == $this->getNumberOfColumns()
          ){
-            $numberOfLines = $this->getLines();
-            $numberOfColumns = $this->getColumns();
+            echo $matrizToAdd->getNumberOfLines();
 
             $recieverMatriz = $this->matriz;
             $delivererMatriz = $matrizToAdd->matriz;
             $myNewMatriz = array();
 
-            for($lineIndex = 0; $lineIndex < $numberOfLines; $lineIndex++){
-                for($columnIndex = 0; $columnIndex < $numberOfColumns; $columnIndex++){
+            for($lineIndex = 0; $lineIndex < $this->getNumberOfLines(); $lineIndex++){
+                for($columnIndex = 0; $columnIndex < $this->getNumberOfColumns(); $columnIndex++){
                         $myNewMatriz[$lineIndex][$columnIndex] = $recieverMatriz[$lineIndex][$columnIndex] + $delivererMatriz[$lineIndex][$columnIndex];
                 }        
             }
@@ -51,20 +51,19 @@ class Matriz{
         }
     }
 
-    public static function sumTwoMatrizes(Matriz $matriz1, Matriz $matriz2){
+    public static function sumTwoMatrizesAndReturn(Matriz $matriz1, Matriz $matriz2)
+    {
         if(
-           $matriz1->getLines() == $matriz2->getLines()
+           $matriz1->getNumberOfLines() == $matriz2->getNumberOfLines()
             &&
-           $matriz1->getColumns() == $matriz2->getColumns()
+           $matriz1->getNumberOfColumns() == $matriz2->getNumberOfColumns()
         ){
-            $numberOfLines = $matriz1->getLines();
-            $numberOfColumns = $matriz2->getColumns();
             $matrizToSum1 = $matriz1->getArrayMatriz();
             $matrizToSum2 = $matriz2->getArrayMatriz();
             $newMatriz = array();
 
-            for($lineIndex = 0; $lineIndex < $numberOfLines; $lineIndex++){
-                for($columnIndex = 0; $columnIndex < $numberOfColumns; $columnIndex++){
+            for($lineIndex = 0; $lineIndex < $matriz1->getNumberOfLines(); $lineIndex++){
+                for($columnIndex = 0; $columnIndex < $matriz1->getNumberOfColumns(); $columnIndex++){
 
                         $newMatriz[$lineIndex][$columnIndex] = $matrizToSum1[$lineIndex][$columnIndex] + $matrizToSum2[$lineIndex][$columnIndex];
                 }        
@@ -76,24 +75,26 @@ class Matriz{
         }
     }
 
-    public function multiplyByAScalarAndSave(float $scalar){
+    public function multiplyByAScalarAndSave(float $scalar)
+    {
         $modifiedMatriz = $this->matriz;
 
-        for($lineIndex = 0; $lineIndex < $this->getLines(); $lineIndex++){
-            for($columnIndex = 0; $columnIndex < $this->getColumns(); $columnIndex++){
+        for($lineIndex = 0; $lineIndex < $this->getNumberOfLines(); $lineIndex++){
+            for($columnIndex = 0; $columnIndex < $this->getNumberOfColumns(); $columnIndex++){
                 $modifiedMatriz[$lineIndex][$columnIndex] = $modifiedMatriz[$lineIndex][$columnIndex] * $scalar;
             }
         }
-        
+
         $this->matriz = $modifiedMatriz;
     }
 
     
-    public function multiplyByAScalarAndReturn(float $scalar){
+    public function multiplyByAScalarAndReturn(float $scalar)
+    {
         $modifiedMatriz = $this->matriz;
 
-        for($lineIndex = 0; $lineIndex < $this->getLines(); $lineIndex++){
-            for($columnIndex = 0; $columnIndex < $this->getColumns(); $columnIndex++){
+        for($lineIndex = 0; $lineIndex < $this->getNumberOfLines(); $lineIndex++){
+            for($columnIndex = 0; $columnIndex < $this->getNumberOfColumns(); $columnIndex++){
                 $modifiedMatriz[$lineIndex][$columnIndex] = $modifiedMatriz[$lineIndex][$columnIndex] * $scalar;
             }
         }
@@ -102,10 +103,11 @@ class Matriz{
     }
 
 
-    public function printMatriz(){
-        for($i = 0; $i < $this->lines; $i++){
+    public function printMatriz()
+    {
+        for($i = 0; $i < $this->getNumberOfLines(); $i++){
             echo "|";
-            for($j = 0; $j < $this->columns; $j++){
+            for($j = 0; $j < $this->getNumberOfColumns(); $j++){
                 echo " ".$this->matriz[$i][$j]."";
             }
             echo " |". PHP_EOL;
@@ -113,19 +115,23 @@ class Matriz{
         }
     }
 
-    private function getLines(){
-        return $this->lines;
+    private function getNumberOfLines()
+    {
+        return $this->numberOfLines;
     }
 
-    private function getColumns(){
-        return $this->columns;
+    private function getNumberOfColumns()
+    {
+        return $this->numberOfColumns;
     }
 
-    private function getArrayMatriz(){
+    private function getArrayMatriz()
+    {
         return $this->matriz;
     }
    
-    private function isValidSize(array $matriz){
+    private function isValidSize(array $matriz)
+    {
         //Toda quantidade de items de uma matriz é divisível pela linha e pela coluna
 
         // Quantidade de elementos é a quantidade recursiva menos a contagem dos arrays. Contagem recursiva é a contagem que olha para os valores dentro do Array.
@@ -147,7 +153,8 @@ class Matriz{
             
     }
 
-    private function hasNoEmptyLine(array $matriz){
+    private function hasNoEmptyLine(array $matriz)
+    {
         //Verificando arrays
         foreach($matriz as $line){
             if(!sizeof($line)){
