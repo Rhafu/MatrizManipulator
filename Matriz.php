@@ -26,17 +26,6 @@ class Matriz{
        }
     }
 
-    public function printMatriz(){
-        for($i = 0; $i < $this->lines; $i++){
-            echo "|";
-            for($j = 0; $j < $this->columns; $j++){
-                echo " ".$this->matriz[$i][$j]."";
-            }
-            echo " |</br>";
-
-        }
-    }
-
     public function sumToThisMatriz(Matriz $matrizToAdd){
         if(
             $matrizToAdd->getLines() == $this->lines
@@ -87,6 +76,43 @@ class Matriz{
         }
     }
 
+    public function multiplyByAScalarAndSave(float $scalar){
+        $modifiedMatriz = $this->matriz;
+
+        for($lineIndex = 0; $lineIndex < $this->getLines(); $lineIndex++){
+            for($columnIndex = 0; $columnIndex < $this->getColumns(); $columnIndex++){
+                $modifiedMatriz[$lineIndex][$columnIndex] = $modifiedMatriz[$lineIndex][$columnIndex] * $scalar;
+            }
+        }
+        
+        $this->matriz = $modifiedMatriz;
+    }
+
+    
+    public function multiplyByAScalarAndReturn(float $scalar){
+        $modifiedMatriz = $this->matriz;
+
+        for($lineIndex = 0; $lineIndex < $this->getLines(); $lineIndex++){
+            for($columnIndex = 0; $columnIndex < $this->getColumns(); $columnIndex++){
+                $modifiedMatriz[$lineIndex][$columnIndex] = $modifiedMatriz[$lineIndex][$columnIndex] * $scalar;
+            }
+        }
+
+        return new Matriz($modifiedMatriz);
+    }
+
+
+    public function printMatriz(){
+        for($i = 0; $i < $this->lines; $i++){
+            echo "|";
+            for($j = 0; $j < $this->columns; $j++){
+                echo " ".$this->matriz[$i][$j]."";
+            }
+            echo " |". PHP_EOL;
+
+        }
+    }
+
     private function getLines(){
         return $this->lines;
     }
@@ -99,7 +125,7 @@ class Matriz{
         return $this->matriz;
     }
    
-    private function isValidSize($matriz){
+    private function isValidSize(array $matriz){
         //Toda quantidade de items de uma matriz é divisível pela linha e pela coluna
 
         // Quantidade de elementos é a quantidade recursiva menos a contagem dos arrays. Contagem recursiva é a contagem que olha para os valores dentro do Array.
@@ -121,7 +147,7 @@ class Matriz{
             
     }
 
-    private function hasNoEmptyLine($matriz){
+    private function hasNoEmptyLine(array $matriz){
         //Verificando arrays
         foreach($matriz as $line){
             if(!sizeof($line)){
@@ -140,6 +166,10 @@ try{
     $matriz2 = new Matriz(array(array(1, 2, 3), array(4, 5, 6)));
 
     $matriz1->sumToThisMatriz($matriz2);
+
+    $matriz1->printMatriz();
+
+    $matriz1->multiplyByAScalarAndSave(2);
 
     $matriz1->printMatriz();
 
